@@ -49,10 +49,11 @@ export const login = (req, res) => {
             httpOnly: true,
         })
             .status(200)
-            .json(others);
+            .send(others);
     });
 };
 export const logout = (req, res) => {
+    // console.log("LO");
     res.clearCookie("accessToken", {
         secure: true,
         sameSite: "none",

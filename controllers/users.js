@@ -32,8 +32,9 @@ export const updateUser = (req, res) => {
 
         db.query(q, values, (err, data) => {
             if (err) return res.status(500).json(err);
+            // const { password, ...others } = data[0]; //erroer cause there is no password in this data.
             if (data.affectedRows > 0)
-                return res.status(200).send("Updated User.");
+                return res.status(200).send("User Updated.");
             return res.status(403).json("You can update only your post.");
         });
     });

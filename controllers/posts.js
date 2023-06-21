@@ -53,3 +53,20 @@ export const addPost = async (req, res) => {
         });
     });
 };
+export const deletePost = (req, res) => {
+    // console.log("enterd");
+    // console.log(req.body.postid);
+    const token = req.cookies.accessToken;
+    if (!token) return res.status(401).send("Not Logged In!");
+
+    Jwt.verify(token, "secretkey", (err, userInfo) => {
+        if (err) return res.status(403).json("Token is not Valid.");
+
+        const q = "delete from posts where id = ?";
+
+        db.query(q, [req.body.postid], (err, data) => {
+            if (err) return res.status(500).json(err);
+            return res.status(200).send("Post Deleted.");
+        });
+    });
+};
