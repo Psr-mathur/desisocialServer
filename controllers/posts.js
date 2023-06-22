@@ -16,7 +16,7 @@ export const getPosts = async (req, res) => {
 
         const q = CPuserid
             ? `select p.*,u.id as userid,name,profilepic from posts as p join users as u on (u.id = p.userid) where
-        p.userid = ?`
+        p.userid = ? order by p.createdat desc`
             : `select p.*,u.id as userid,name,profilepic from posts as p join users as u on (u.id = p.userid) 
                 left join relationships as r on (p.userid = r.followeduserid) where r.followeruserid = ? or p.userid = ?
                 order by p.createdat desc`;

@@ -43,10 +43,13 @@ export const login = (req, res) => {
         }
 
         const token = Jwt.sign({ id: data[0].id }, "secretkey");
-
+        const expirationDate = new Date(Date.now() + 7 * 86400000);
         const { password, ...others } = data[0];
         res.cookie("accessToken", token, {
-            httpOnly: true,
+            expires: expirationDate,
+            // httpOnly: true,
+            // sameSite: "None",
+            // secure: true,
         })
             .status(200)
             .send(others);
@@ -55,8 +58,8 @@ export const login = (req, res) => {
 export const logout = (req, res) => {
     // console.log("LO");
     res.clearCookie("accessToken", {
-        secure: true,
-        sameSite: "none",
+        // secure: true,
+        // sameSite: "None",
     })
         .status(200)
         .send("loggedOut succesfully.");
