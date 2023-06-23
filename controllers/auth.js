@@ -48,7 +48,7 @@ export const login = (req, res) => {
         res.cookie("accessToken", token, {
             expires: expirationDate,
             httpOnly: true,
-            domain: "desisocialserver.onrender.com",
+            domain: ".onrender.com",
             secure: true,
             path: "/",
         })
