@@ -50,6 +50,7 @@ export const login = (req, res) => {
             httpOnly: true,
             domain: ".onrender.com",
             path: "/",
+            sameSite: "none",
         });
         res.status(200).send(others);
     });
