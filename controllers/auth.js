@@ -49,7 +49,6 @@ export const login = (req, res) => {
             expires: expirationDate,
             httpOnly: true,
             domain: ".onrender.com",
-            secure: true,
             path: "/",
         })
             .status(200)
