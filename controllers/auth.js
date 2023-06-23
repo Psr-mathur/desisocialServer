@@ -45,14 +45,14 @@ export const login = (req, res) => {
         const token = Jwt.sign({ id: data[0].id }, "secretkey");
         const expirationDate = new Date(Date.now() + 7 * 86400000);
         const { password, ...others } = data[0];
+        res.status(200).send(others);
         res.cookie("accessToken", token, {
             expires: expirationDate,
             httpOnly: true,
             domain: ".onrender.com",
+            secure: true,
             path: "/",
-        })
-            .status(200)
-            .send(others);
+        });
     });
 };
 export const logout = (req, res) => {
@@ -60,7 +60,6 @@ export const logout = (req, res) => {
     res.clearCookie("accessToken", {
         sameSite: "none",
         secure: true,
-    })
-        .status(200)
-        .send("loggedOut succesfully.");
+    });
+    res.status(200).send("loggedOut succesfully.");
 };
