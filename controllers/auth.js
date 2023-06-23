@@ -47,7 +47,6 @@ export const login = (req, res) => {
         const { password, ...others } = data[0];
         res.cookie("accessToken", token, {
             expires: expirationDate,
-            domain: ".onrender.com",
             httpOnly: true,
         })
             .status(200)
