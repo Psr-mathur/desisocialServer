@@ -48,7 +48,7 @@ export const login = (req, res) => {
         res.cookie("accessToken", token, {
             expires: expirationDate,
             domain: ".onrender.com",
-            path: "/",
+            httpOnly: true,
         })
             .status(200)
             .send(others);
