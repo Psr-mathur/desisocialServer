@@ -16,15 +16,17 @@ import "dotenv/config";
 const app = express();
 const PORT = process.env.PORT || 4000;
 app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Credentials", true);
-  next();
+    // res.header("Access-Control-Allow-Credentials", true);
+    res.setHeader("Access-Control-Allow-Credentials", true);
+    next();
 });
 app.use(express.json());
 app.use(cookieParser());
 app.use(
-  cors({
-    origin: "https://desisocial.onrender.com",
-  })
+    cors({
+        origin: "https://desisocial.onrender.com",
+        credentials: true,
+    })
 );
 
 app.use("/authimagekit", imagekitRoute);
@@ -39,5 +41,5 @@ app.use("/api/comments", commentsRoute);
 app.use("/api/relationships", relationshipsRoute);
 app.use("/api/suggestions", suggestionsdRoute);
 app.listen(PORT, () => {
-  console.log("server is live on PORT " + PORT);
+    console.log("server is live on PORT " + PORT);
 });
