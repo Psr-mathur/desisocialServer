@@ -43,11 +43,12 @@ export const login = (req, res) => {
         }
 
         const token = Jwt.sign({ id: data[0].id }, "secretkey");
-        const expirationDate = new Date(Date.now() + 7 * 86400000);
+        const expirationDate = new Date(Date.now() + 86400000);
         const { password, ...others } = data[0];
         res.cookie("accessToken", token, {
             expires: expirationDate,
             httpOnly: true,
+            domain: "desisocialserver.onrender.com",
         })
             .status(200)
             .send(others);
