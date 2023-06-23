@@ -51,6 +51,7 @@ export const login = (req, res) => {
             domain: ".onrender.com",
             path: "/",
             sameSite: "none",
+            secure: true,
         });
         res.status(200).send(others);
     });
