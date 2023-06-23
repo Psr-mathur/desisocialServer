@@ -52,8 +52,9 @@ export const login = (req, res) => {
             path: "/",
             sameSite: "none",
             secure: true,
-        });
-        res.status(200).send(others);
+        })
+            .status(200)
+            .send(others);
     });
 };
 export const logout = (req, res) => {
