@@ -1,22 +1,22 @@
 import mysql from "mysql";
 import "dotenv/config";
 
-// export const db = mysql.createConnection({
-//     host: "localhost",
-//     user: "root",
-//     password: "744542",
-//     database: "social",
-// });
+export const db = mysql.createConnection({
+	host: "localhost",
+	user: "root",
+	password: "744542",
+	database: "social",
+});
 // export const db = mysql.createConnection(process.env.DATABASE_URL);
 // export const db = mysql.createConnection(process.env.DATABASE_URL_CLEVERCLOUD);
 
-export const db = mysql.createConnection({
-    // working
-    host: "db4free.net",
-    password: "desisocialpassword",
-    user: "desisocialuser",
-    database: "desisocial",
-});
+// export const db = mysql.createConnection({
+//     // working
+//     host: "db4free.net",
+//     password: "desisocialpassword",
+//     user: "desisocialuser",
+//     database: "desisocial",
+// });
 // export const db = mysql.createConnection({
 //     // working
 //     host: "b4ifp7riy7rrm641xnia-mysql.services.clever-cloud.com",
@@ -34,6 +34,6 @@ export const db = mysql.createConnection({
 // });
 
 db.connect((err) => {
-    if (err) throw err;
-    console.log("Connected");
+	if (err) throw err;
+	console.log("Connected");
 });
