@@ -1,6 +1,6 @@
 import { db } from "../connect.js";
 import Jwt from "jsonwebtoken";
-import { createAccount } from "../utils/auth.utils.js";
+import { createAccount } from "../utils/db.utils.js";
 
 export const register = (req, res) => {
 	const q = "select * from users where username = ?";
@@ -35,11 +35,11 @@ export const login = (req, res) => {
 		}
 
 		const token = Jwt.sign({ id: data[0].id }, "secretkey", {
-			expiresIn: "200s",
+			expiresIn: "1d",
 		});
 
 		res.cookie("accessToken", token, {
-			maxAge: 15000,
+			maxAge: 8.64e7,
 			httpOnly: true,
 			// domain: "desisocialserver.onrender.com",
 			secure: true,

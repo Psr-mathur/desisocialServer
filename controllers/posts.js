@@ -1,72 +1,56 @@
 import { db } from "../connect.js";
-import Jwt from "jsonwebtoken";
 import moment from "moment/moment.js";
 
 export const getPosts = async (req, res) => {
-    let CPuserid = "";
-    if (req.query.cpuserid != "undefined") {
-        CPuserid = req.query.cpuserid;
-    }
-    const token = await req.cookies.accessToken;
-    // console.log(CPuserid);
-    if (!token) return res.status(401).send("Not Logged In!");
+	let CPuserid = "";
+	if (req.query.cpuserid != "undefined") {
+		CPuserid = req.query.cpuserid;
+	}
 
-    Jwt.verify(token, "secretkey", (err, userInfo) => {
-        if (err) return res.status(403).json("Token is not Valid.");
+	const userInfo = req.decodedUser;
 
-        const q = CPuserid
-            ? `select p.*,u.id as userid,name,profilepic from posts as p join users as u on (u.id = p.userid) where
+	const q = CPuserid
+		? `select p.*,u.id as userid,name,profilepic from posts as p join users as u on (u.id = p.userid) where
         p.userid = ? order by p.createdat desc`
-            : `select p.*,u.id as userid,name,profilepic from posts as p join users as u on (u.id = p.userid) 
+		: `select p.*,u.id as userid,name,profilepic from posts as p join users as u on (u.id = p.userid) 
                 left join relationships as r on (p.userid = r.followeduserid) where r.followeruserid = ? or p.userid = ?
                 order by p.createdat desc`;
 
-        const values = CPuserid ? [CPuserid] : [userInfo.id, userInfo.id];
+	const values = CPuserid ? [CPuserid] : [userInfo.id, userInfo.id];
 
-        db.query(q, values, (err, data) => {
-            if (err) return res.status(500).json(err);
-            // console.log(data);
-            return res.status(200).send(data);
-        });
-    });
+	db.query(q, values, (err, data) => {
+		if (err) return res.status(500).json(err);
+		// console.log(data);
+		return res.status(200).send(data);
+	});
 };
 export const addPost = async (req, res) => {
-    const token = await req.cookies.accessToken;
-    if (!token) return res.status(401).send("Not Logged In!");
+	const userInfo = req.decodedUser;
 
-    Jwt.verify(token, "secretkey", (err, userInfo) => {
-        if (err) return res.status(403).json("Token is not Valid.");
+	const q = "insert into posts (`desc`,`img`,`createdat`,`userid`) value (?)";
 
-        const q =
-            "insert into posts (`desc`,`img`,`createdat`,`userid`) value (?)";
+	const values = [
+		req.body.desc,
+		req.body.img,
+		moment(Date.now()).format("YYYY-MM-DD HH:mm:ss"),
+		userInfo.id,
+	];
 
-        const values = [
-            req.body.desc,
-            req.body.img,
-            moment(Date.now()).format("YYYY-MM-DD HH:mm:ss"),
-            userInfo.id,
-        ];
-
-        db.query(q, [values], (err, data) => {
-            if (err) return res.status(500).json(err);
-            return res.status(200).send("Post created .");
-        });
-    });
+	db.query(q, [values], (err, data) => {
+		if (err) return res.status(500).json(err);
+		return res.status(200).send("Post created .");
+	});
 };
 export const deletePost = (req, res) => {
-    // console.log("enterd");
-    // console.log(req.body.postid);
-    const token = req.cookies.accessToken;
-    if (!token) return res.status(401).send("Not Logged In!");
+	// console.log("enterd");
+	// console.log(req.body.postid);
 
-    Jwt.verify(token, "secretkey", (err, userInfo) => {
-        if (err) return res.status(403).json("Token is not Valid.");
+	const userInfo = req.decodedUser;
 
-        const q = "delete from posts where id = ?";
+	const q = "delete from posts where id = ?";
 
-        db.query(q, [req.body.postid], (err, data) => {
-            if (err) return res.status(500).json(err);
-            return res.status(200).send("Post Deleted.");
-        });
-    });
+	db.query(q, [req.body.postid], (err, data) => {
+		if (err) return res.status(500).json(err);
+		return res.status(200).send("Post Deleted.");
+	});
 };
