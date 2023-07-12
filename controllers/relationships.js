@@ -42,36 +42,32 @@ export const addRelationship = (req, res) => {
 	db.query(q, [values], (err, data) => {
 		if (err) return res.status(500).json("Database error");
 
-		try {
-			const followedusername = db.query(
-				"select name from users where id = ?",
-				[req.body.userid]
-			);
-			return res.status(200).send(`you followed ${followedusername}`);
-		} catch (error) {
-			return res.status(200).send(`you followed xxxxx`);
-		}
+		db.query(
+			"select name from users where id = ?",
+			[req.body.userid],
+			(error, result) => {
+				if (error) return res.status(500).json("you followed xxxxx");
+				// console.log(result[0]);
+				return res.status(200).send(`you followed ${result[0].name}`);
+			}
+		);
 	});
 };
 export const deleteRelationship = (req, res) => {
 	const userInfo = req.decodedUser;
 	const q = `delete from relationships where followeruserid = ? and followeduserid = ? `;
 
-	// const values = [];
-
-	// console.log(req.query.followeruserid, userInfo.id);
 	db.query(q, [userInfo.id, req.query.followeduserid], (err, data) => {
 		if (err) return res.status(500).json("Database error");
-		try {
-			const followedusername = db.query(
-				"select name from users where id = ?",
-				[req.query.followeduserid]
-			);
-			// console.log(req.query.followeduserid);
-			return res.status(200).send(`you unfollowed ${followedusername}`);
-		} catch (error) {
-			console.log("err");
-			return res.status(500).json("Database error");
-		}
+
+		db.query(
+			"select name from users where id = ?",
+			[req.query.followeduserid],
+			(error, result) => {
+				if (error) return res.status(500).json("you unfollowed xxxxx");
+				// console.log(result[0]);
+				return res.status(200).send(`you unfollowed ${result[0].name}`);
+			}
+		);
 	});
 };
